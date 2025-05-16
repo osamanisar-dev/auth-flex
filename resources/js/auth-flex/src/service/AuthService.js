@@ -1,10 +1,7 @@
 import axios from 'axios';
 
-const API_URL = process.env.VUE_APP_API_URL;
-axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-
 const api = axios.create({
-    baseURL: API_URL,
+    baseURL: process.env.VUE_APP_API_URL,
 })
 
 api.interceptors.request.use(config => {
@@ -24,6 +21,14 @@ export default {
         localStorage.setItem('user', JSON.stringify(response.data.user));
         return response.data;
     },
+
+    async login(data){
+        const response = await api.post('/login',data);
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        return response.data;
+    },
+
     async logout() {
         const response = await api.post('/logout');
         localStorage.removeItem('token')

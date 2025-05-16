@@ -1,19 +1,19 @@
 <template>
     <div class="card-container">
-        <form class="form">
+        <form class="form" @submit.prevent="login">
             <div class="flex-column">
                 <label>Email </label></div>
             <div class="inputForm">
                 <i class="fa-solid fa-at"></i>
-                <input placeholder="Enter your Email" class="input" type="text">
+                <input v-model="email" placeholder="Enter your Email" class="input" type="email">
             </div>
             <div class="flex-column">
                 <label>Password </label></div>
             <div class="inputForm">
                 <i class="fa-solid fa-lock"></i>
-                <input placeholder="Enter your Password" class="input" type="password">
+                <input v-model="password" placeholder="Enter your Password" class="input" type="password">
             </div>
-            <button class="button-submit">Sign In</button>
+            <button class="button-submit" type="submit">Sign In</button>
             <p class="p">Don't have an account? <span class="span">
               <router-link to="/register">Sign Up</router-link>
               </span>
@@ -49,8 +49,40 @@
 </template>
 
 <script>
+import AuthService from "@/service/AuthService";
+import {toast} from "vue3-toastify";
+
 export default {
-    name: 'LoginComponent'
+    name: 'LoginComponent',
+    data() {
+        return {
+            email: '',
+            password: ''
+        }
+    },
+    methods: {
+        showToast(message, status) {
+            toast(message, {
+                autoClose: 3000,
+                'type': status
+            })
+        },
+        async login() {
+            const user = {
+                email: this.email,
+                password: this.password
+            }
+            try {
+                const response = await AuthService.login(user);
+                this.$router.replace({name: 'Dashboard'}).then(() => {
+                    this.showToast(response.message, 'success');
+                });
+            } catch (e) {
+                const errorMsg = e.response.data.message;
+                this.showToast(errorMsg, 'error')
+            }
+        }
+    }
 }
 </script>
 

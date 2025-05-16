@@ -20,19 +20,30 @@ class AuthController extends Controller
             'token' => $token,
             'user' => $user,
 
-        ],Response::HTTP_OK);
+        ], Response::HTTP_OK);
     }
 
     public function login(LoginRequest $request)
     {
         $credentials = $request->only('email', 'password');
-        Auth::attempt($credentials);
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            $token = $user->createToken('auth_token')->plainTextToken;
+            return response()->json([
+                'message' => 'LogIn Successfully',
+                'user' => $user,
+                'token' => $token
+            ], Response::HTTP_OK);
+        }
+        return response()->json([
+            'message' => 'Invalid credentials',
+        ], Response::HTTP_UNAUTHORIZED);
 
     }
+
     public function logout(Request $request)
     {
         try {
-            // Delete all tokens for the user
             $request->user()->tokens()->delete();
 
             return response()->json([
@@ -44,7 +55,7 @@ class AuthController extends Controller
             return response()->json([
                 'message' => 'Logout failed',
                 'error' => $e->getMessage()
-            ], 500);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

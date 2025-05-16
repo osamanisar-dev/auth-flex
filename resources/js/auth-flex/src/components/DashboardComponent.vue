@@ -71,13 +71,13 @@ export default {
             }
         }
     },
-    methods:{
+    methods: {
         showToast(message, status) {
             toast(message, {autoClose: 3000, "type": status,});
         },
-        async signOut(){
+        async signOut() {
             const response = await AuthService.logout();
-            this.$router.replace({ name: 'Login' }).then(() => {
+            this.$router.replace({name: 'Login'}).then(() => {
                 this.showToast(response.message, 'success');
             });
         }
@@ -103,6 +103,7 @@ export default {
     0 0 0 1px rgba(255, 255, 255, 0.1) inset,
     0 0 20px rgba(13, 110, 253, 0.3);
 }
+
 .user-icon {
     transition: all 0.3s ease;
 }
