@@ -13,7 +13,9 @@
                 <i class="fa-solid fa-lock"></i>
                 <input v-model="password" placeholder="Enter your Password" class="input" type="password">
             </div>
-            <button class="button-submit" type="submit">Sign In</button>
+            <div class="button">
+                <button class="btn btn-dark" type="submit">Sign In</button>
+            </div>
             <p class="p">Don't have an account? <span class="span">
               <router-link to="/register">Sign Up</router-link>
               </span>
@@ -169,19 +171,6 @@ export default {
     cursor: pointer;
 }
 
-.button-submit {
-    margin: 20px 0 10px 0;
-    background-color: #151717;
-    border: none;
-    color: white;
-    font-size: 15px;
-    font-weight: 500;
-    border-radius: 10px;
-    height: 50px;
-    width: 100%;
-    cursor: pointer;
-}
-
 .p {
     text-align: center;
     color: black;
@@ -189,25 +178,15 @@ export default {
     margin: 5px 0;
 }
 
-.btn {
-    margin-top: 10px;
-    width: 100%;
-    height: 50px;
+.btn{
+    width: 90%;
     border-radius: 10px;
+    margin-top: 18px;
+    height: 42px;
+}
+
+.button{
     display: flex;
     justify-content: center;
-    align-items: center;
-    font-weight: 500;
-    gap: 10px;
-    border: 1px solid #ededef;
-    background-color: white;
-    cursor: pointer;
-    transition: 0.2s ease-in-out;
 }
-
-.btn:hover {
-    border: 1px solid #2d79f3;;
-}
-
-
 </style>

@@ -19,7 +19,16 @@
                 <i class="fa-solid fa-lock"></i>
                 <input v-model="password" placeholder="Enter your Password" class="input" type="password">
             </div>
-            <button class="button-submit" type="submit">Sign Up</button>
+            <div class="button">
+                <button class="btn btn-dark" type="submit" :disabled="loading">
+                    <span v-if="loading">
+                        <LoaderComponent/>
+                    </span>
+                    <span v-else>
+                        Sign Up
+                    </span>
+                </button>
+            </div>
             <p class="p">Already have an account ? <span class="span">
           <router-link to="/login">SignIn</router-link>
           </span>
@@ -58,15 +67,17 @@
 import AuthService from "@/service/AuthService";
 import {toast} from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import LoaderComponent from "@/components/LoaderComponent.vue";
 
 export default {
     name: 'RegisterComponent',
-
+    components: {LoaderComponent},
     data() {
         return {
             name: '',
             email: '',
             password: '',
+            loading: false
         }
     },
     methods: {
@@ -77,6 +88,7 @@ export default {
             });
         },
         async register() {
+            this.loading = true;
             const user = {
                 name: this.name,
                 email: this.email,
@@ -95,6 +107,9 @@ export default {
                 } else {
                     this.showToast('Something went wrong', 'error');
                 }
+            }
+            finally {
+                this.loading = false
             }
         }
     }
@@ -184,19 +199,6 @@ export default {
     cursor: pointer;
 }
 
-.button-submit {
-    margin: 20px 0 10px 0;
-    background-color: #151717;
-    border: none;
-    color: white;
-    font-size: 15px;
-    font-weight: 500;
-    border-radius: 10px;
-    height: 50px;
-    width: 100%;
-    cursor: pointer;
-}
-
 .p {
     text-align: center;
     color: black;
@@ -204,23 +206,18 @@ export default {
     margin: 5px 0;
 }
 
-.btn {
-    margin-top: 10px;
-    width: 100%;
-    height: 50px;
+.btn{
+    width: 90%;
     border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: 500;
-    gap: 10px;
-    border: 1px solid #ededef;
-    background-color: white;
-    cursor: pointer;
-    transition: 0.2s ease-in-out;
+    margin-top: 18px;
+    height: 42px;
+    position: relative;
+
 }
 
-.btn:hover {
-    border: 1px solid #2d79f3;;
+.button{
+    display: flex;
+    justify-content: center;
 }
+
 </style>
