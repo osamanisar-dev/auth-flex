@@ -15,8 +15,3 @@ Route::controller(AuthController::class)->middleware('auth:sanctum')->group(func
     Route::post('/email/verification-notification', 'sendEmailNotification');
 });
 
-// Verify the email
-Route::get('/verify-email/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-    return redirect(env('FRONTEND_URL'));
-})->middleware(['signed'])->name('verification.verify');

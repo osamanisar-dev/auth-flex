@@ -27,10 +27,11 @@ class AuthController extends Controller
         );
         Mail::to($user->email)->send(new EmailVeritficationMail($signedUrl));
         return response()->json([
-            'message' => 'User registered successfully.',
+            'message' => "User registered successfully.\nEmail verification link sent to email",
             'token' => $token,
-            'user' => $user,
-
+            'user' => $user->only([
+                'id', 'name', 'email', 'email_verified_at', 'created_at', 'updated_at'
+            ]),
         ], Response::HTTP_OK);
     }
 

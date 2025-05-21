@@ -41,7 +41,10 @@
                                 <i class="fas fa-envelope"></i>
                             </span>
                             <div class="card-points">
-                                <p class="mb-0 fw-bold">{{ user.email }}</p>
+                                <p class="mb-0 fw-bold">{{ user.email }}
+                                    <span class="text-black-50" v-if="user.email_verified_at">(verified)</span>
+                                    <span v-else class="text-black-50">(not verified)</span>
+                                </p>
                                 <small class="text-muted">Email Address</small>
                             </div>
                         </div>
@@ -63,12 +66,25 @@ export default {
     name: 'DashboardComponent',
     data() {
         const user = JSON.parse(localStorage.getItem('user'));
-        return {
-            user: {
-                id: user.id,
-                name: user.name,
-                email: user.email
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('verified') === '1') {
+            const verifiedId = parseInt(params.get('id'));
+            const verifiedAt = params.get('email_verified_at');
+
+            if (user.id === verifiedId && verifiedAt) {
+                user.email_verified_at = verifiedAt;
+                localStorage.setItem('user', JSON.stringify(user));
+                this.user = user;
+                const newUrl = window.location.origin + window.location.pathname;
+                window.history.replaceState({}, document.title, newUrl);
+                this.showToast('Email has been verified', 'success');
+
+            } else {
+                this.showToast('Invalid or expired verification link.', 'error');
             }
+        }
+        return {
+            user: user
         }
     },
     methods: {
