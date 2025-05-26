@@ -46,7 +46,7 @@ export default {
 
     async signUpWithGoogle() {
         try {
-            window.location.href = 'https://943b-2400-adcc-2105-cb00-bf27-e8a4-63a2-7c94.ngrok-free.app/auth/google';
+            window.location.href = process.env.VUE_APP_GOOGLE_WEB_URL;
         } catch (error) {
             console.error('Google OAuth error:', error);
         }
