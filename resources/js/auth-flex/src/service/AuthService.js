@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {toast} from "vue3-toastify";
 
 const api = axios.create({
     baseURL: process.env.VUE_APP_API_URL,
@@ -15,6 +16,12 @@ api.interceptors.request.use(config => {
 });
 
 export default {
+    showToast(message, status) {
+        toast(message, {
+            autoClose: 3000,
+            "type": status,
+        });
+    },
     async register(data) {
         const response = await api.post('/register', data);
         localStorage.setItem('token', response.data.token);
@@ -35,5 +42,13 @@ export default {
         localStorage.removeItem('user')
         delete axios.defaults.headers.common['Authorization']
         return response.data;
+    },
+
+    async signUpWithGoogle() {
+        try {
+            window.location.href = 'https://943b-2400-adcc-2105-cb00-bf27-e8a4-63a2-7c94.ngrok-free.app/auth/google';
+        } catch (error) {
+            console.error('Google OAuth error:', error);
+        }
     }
 }

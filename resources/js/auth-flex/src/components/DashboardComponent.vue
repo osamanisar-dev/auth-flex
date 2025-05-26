@@ -18,7 +18,7 @@
                     <div class="user-details text-start">
                         <div class="d-flex align-items-center mb-3">
                             <span class="badge bg-primary me-3 p-2">
-                                <i class="fas fa-id-badge"></i>
+                                <i class="fa-solid fa-id-badge icon"></i>
                             </span>
                             <div class="card-points">
                                 <p class="mb-0 fw-bold">{{ user.id }}</p>
@@ -28,7 +28,7 @@
 
                         <div class="d-flex align-items-center mb-3">
                             <span class="badge bg-primary me-3 p-2">
-                                <i class="fas fa-user"></i>
+                                <i class="fa-solid fa-user icon"></i>
                             </span>
                             <div class="card-points">
                                 <p class="mb-0 fw-bold">{{ user.name }}</p>
@@ -38,14 +38,15 @@
 
                         <div class="d-flex align-items-center mb-4">
                             <span class="badge bg-primary me-3 p-2">
-                                <i class="fas fa-envelope"></i>
+                                <i class="fa-solid fa-envelope icon"></i>
                             </span>
                             <div class="card-points">
-                                <p class="mb-0 fw-bold">{{ user.email }}
+                                <p class="mb-0 fw-bold">{{ user.email }}</p>
+                                    <small class="text-muted">Email Address</small>
                                     <span class="text-black-50" v-if="user.email_verified_at">(verified)</span>
                                     <span v-else class="text-black-50">(not verified)</span>
-                                </p>
-                                <small class="text-muted">Email Address</small>
+
+
                             </div>
                         </div>
                         <button class="btn btn-primary w-100 py-2" @click="signOut">
@@ -64,6 +65,9 @@ import {toast} from "vue3-toastify";
 
 export default {
     name: 'DashboardComponent',
+    mounted() {
+        this.user = JSON.parse(localStorage.getItem('user'));
+    },
     data() {
         const user = JSON.parse(localStorage.getItem('user'));
         const params = new URLSearchParams(window.location.search);
@@ -78,7 +82,6 @@ export default {
                 const newUrl = window.location.origin + window.location.pathname;
                 window.history.replaceState({}, document.title, newUrl);
                 this.showToast('Email has been verified', 'success');
-
             } else {
                 this.showToast('Invalid or expired verification link.', 'error');
             }
@@ -127,7 +130,9 @@ export default {
 .user-icon:hover {
     transform: scale(1.1);
 }
-
+.icon{
+  color: #ffffff
+}
 .card-points {
     margin-left: 10px;
 }

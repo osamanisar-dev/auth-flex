@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GoogleController;
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -9,16 +10,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 
 Route::get('/', function () {
-    return view('email-verification');
-});
-
-Route::get('send-mail', function () {
-    $details = [
-        'title' => 'Mail from ItSolutionStuff.com',
-        'body' => 'This is for testing email using smtp'
-    ];
-    Mail::to('your_receiver_email@gmail.com')->send(new \App\Mail\EmailVeritficationMail($details));
-    dd("Email is Sent.");
+    return view('welcome');
 });
 
 Route::get('/verify-email/{id}/{hash}', function (Request $request, $id, $hash) {
@@ -41,3 +33,8 @@ Route::get('/verify-email/{id}/{hash}', function (Request $request, $id, $hash) 
             'email_verified_at' => $user->email_verified_at->toISOString()
         ]));
 })->middleware(['signed'])->name('verification.verify');
+
+Route::controller(GoogleController::class)->group(function () {
+    Route::get('auth/google', 'redirectToGoogle');
+    Route::get('auth/google/callback', 'handleGoogleCallback');
+});

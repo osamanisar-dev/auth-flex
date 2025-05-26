@@ -37,7 +37,7 @@
             <p class="p line">Or With</p>
 
             <div class="flex-row">
-                <button class="btn google">
+                <button type="button" class="btn google" @click="signUpWithGoogle">
                     <svg xml:space="preserve" style="enable-background:new 0 0 512 512;" viewBox="0 0 512 512" y="0px"
                          x="0px" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
                          id="Layer_1" width="20" version="1.1">
@@ -111,6 +111,10 @@ export default {
             finally {
                 this.loading = false
             }
+        },
+
+        async signUpWithGoogle(){
+            await AuthService.signUpWithGoogle();
         }
     }
 }
