@@ -96,7 +96,7 @@ export default {
             }
             try {
                 const response = await AuthService.register(user);
-                this.$router.replace({name: 'Dashboard'}).then(()=>{
+                this.$router.replace({name: 'Dashboard'}).then(() => {
                     this.showToast(response.message, 'success');
                 });
             } catch (error) {
@@ -107,13 +107,12 @@ export default {
                 } else {
                     this.showToast('Something went wrong', 'error');
                 }
-            }
-            finally {
+            } finally {
                 this.loading = false
             }
         },
 
-        async signUpWithGoogle(){
+        async signUpWithGoogle() {
             await AuthService.signUpWithGoogle();
         }
     }
@@ -210,7 +209,7 @@ export default {
     margin: 5px 0;
 }
 
-.btn{
+.btn {
     width: 90%;
     border-radius: 10px;
     margin-top: 18px;
@@ -219,7 +218,7 @@ export default {
 
 }
 
-.button{
+.button {
     display: flex;
     justify-content: center;
 }

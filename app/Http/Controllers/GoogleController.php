@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -24,16 +23,13 @@ class GoogleController extends Controller
             if ($findUser) {
                 Auth::login($findUser);
                 $accessToken = $findUser->createToken('google-login')->plainTextToken;
-
                 $userData = [
                     'id' => $findUser->id,
                     'name' => $findUser->name,
                     'email' => $findUser->email,
                     'email_verified_at' => $findUser->email_verified_at
                 ];
-
                 $userJson = urlencode(json_encode($userData));
-
                 return redirect(env('FRONTEND_URL') . "/?token={$accessToken}&user={$userJson}&auth=login");
             } else {
                 $newUser = User::create([

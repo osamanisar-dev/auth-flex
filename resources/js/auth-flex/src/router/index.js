@@ -30,7 +30,7 @@ router.beforeEach((to, from, next) => {
             ? 'Sign Up Successfully!'
             : 'Sign In Successfully!';
         AuthService.showToast(message, 'success');
-        return next({ name: 'Dashboard' });
+        return next({name: 'Dashboard'});
     }
     if (!token && to.meta.requiresAuth) {
         return next({name: 'Login'});

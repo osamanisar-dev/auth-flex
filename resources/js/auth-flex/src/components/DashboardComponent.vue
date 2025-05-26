@@ -42,11 +42,9 @@
                             </span>
                             <div class="card-points">
                                 <p class="mb-0 fw-bold">{{ user.email }}</p>
-                                    <small class="text-muted">Email Address</small>
-                                    <span class="text-black-50" v-if="user.email_verified_at">(verified)</span>
-                                    <span v-else class="text-black-50">(not verified)</span>
-
-
+                                <small class="text-muted">Email Address</small>
+                                <span class="text-black-50" v-if="user.email_verified_at">(verified)</span>
+                                <span v-else class="text-black-50">(not verified)</span>
                             </div>
                         </div>
                         <button class="btn btn-primary w-100 py-2" @click="signOut">
@@ -130,9 +128,11 @@ export default {
 .user-icon:hover {
     transform: scale(1.1);
 }
-.icon{
-  color: #ffffff
+
+.icon {
+    color: #ffffff
 }
+
 .card-points {
     margin-left: 10px;
 }

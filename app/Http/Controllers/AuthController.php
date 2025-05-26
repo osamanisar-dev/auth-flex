@@ -19,7 +19,6 @@ class AuthController extends Controller
     {
         $user = User::create($request->validated());
         $token = $user->createToken('auth_token')->plainTextToken;
-
         $signedUrl = URL::temporarySignedRoute(
             'verification.verify',
             now()->addMinutes(10),
@@ -50,29 +49,20 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Invalid credentials',
         ], Response::HTTP_UNAUTHORIZED);
-
     }
 
     public function logout(Request $request)
     {
         try {
             $request->user()->tokens()->delete();
-
             return response()->json([
                 'message' => 'Logged out successfully',
-                'logged_out_at' => now()->toDateTimeString()
-            ]);
-
+            ], Response::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Logout failed',
                 'error' => $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-    }
-
-    public function sendEmailNotification(Request $request)
-    {
-        $request->user()->sendEmailVerificationNotification();
     }
 }

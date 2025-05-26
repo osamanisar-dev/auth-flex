@@ -84,7 +84,7 @@ export default {
                 this.showToast(errorMsg, 'error')
             }
         },
-        async signInWithGoogle(){
+        async signInWithGoogle() {
             await AuthService.signUpWithGoogle();
         }
     }
@@ -181,14 +181,14 @@ export default {
     margin: 5px 0;
 }
 
-.btn{
+.btn {
     width: 90%;
     border-radius: 10px;
     margin-top: 18px;
     height: 42px;
 }
 
-.button{
+.button {
     display: flex;
     justify-content: center;
 }

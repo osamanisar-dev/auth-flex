@@ -29,8 +29,8 @@ export default {
         return response.data;
     },
 
-    async login(data){
-        const response = await api.post('/login',data);
+    async login(data) {
+        const response = await api.post('/login', data);
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
         return response.data;
