@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserRegistered;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Mail\EmailVeritficationMail;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
@@ -19,12 +16,7 @@ class AuthController extends Controller
     {
         $user = User::create($request->validated());
         $token = $user->createToken('auth_token')->plainTextToken;
-        $signedUrl = URL::temporarySignedRoute(
-            'verification.verify',
-            now()->addMinutes(10),
-            ['id' => $user->id, 'hash' => sha1($user->email)]
-        );
-        Mail::to($user->email)->send(new EmailVeritficationMail($signedUrl));
+        event(new UserRegistered($user));
         return response()->json([
             'message' => "User registered successfully.\nEmail verification link sent to email",
             'token' => $token,
