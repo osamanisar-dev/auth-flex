@@ -1,7 +1,22 @@
 <template>
     <div class="container dashboard-wrapper position-relative">
         <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-            <div class="card user-card p-4" style="width: 400px;">
+
+            <div v-if="loading" class="card user-card p-4" style="width: 400px;">
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="skeleton-icon mb-3"></div>
+                        <div class="skeleton-text title"></div>
+                    </div>
+
+                    <div class="skeleton-line mb-3"></div>
+                    <div class="skeleton-line mb-3"></div>
+                    <div class="skeleton-line mb-4"></div>
+                    <div class="skeleton-button"></div>
+                </div>
+            </div>
+
+            <div v-else class="card user-card p-4" style="width: 400px;">
                 <div class="card-body">
                     <!-- Centered Header Section -->
                     <div class="text-center mb-4">
@@ -65,6 +80,9 @@ export default {
     name: 'DashboardComponent',
     mounted() {
         this.user = JSON.parse(localStorage.getItem('user'));
+        if(this.user){
+            this.loading = false;
+        }
     },
     data() {
         const user = JSON.parse(localStorage.getItem('user'));
@@ -85,7 +103,8 @@ export default {
             }
         }
         return {
-            user: user
+            user: user,
+            loading: !user
         }
     },
     methods: {
@@ -175,4 +194,45 @@ export default {
     background: #0d6efd;
     border-radius: 3px;
 }
+
+.skeleton-line,
+.skeleton-text,
+.skeleton-button,
+.skeleton-icon {
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+.skeleton-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+
+.skeleton-text.title {
+    width: 60%;
+    height: 20px;
+    margin: 0 auto;
+}
+
+.skeleton-line {
+    height: 20px;
+    width: 100%;
+}
+
+.skeleton-button {
+    height: 40px;
+    width: 100%;
+    margin-top: 15px;
+    border-radius: 10px;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+}
+
 </style>

@@ -30,7 +30,7 @@ class GoogleController extends Controller
                     'email_verified_at' => $findUser->email_verified_at
                 ];
                 $userJson = urlencode(json_encode($userData));
-                return redirect(env('FRONTEND_URL') . "/?token={$accessToken}&user={$userJson}&auth=login");
+                return redirect(config('app.frontend_url') . "/?token={$accessToken}&user={$userJson}&auth=login");
             } else {
                 $newUser = User::create([
                     'name' => $user->name,
@@ -47,7 +47,7 @@ class GoogleController extends Controller
                     'email_verified_at' => $newUser->email_verified_at
                 ];
                 $userJson = urlencode(json_encode($userData));
-                return redirect(env('FRONTEND_URL') . "?token={$accessToken}&user={$userJson}&auth=register");
+                return redirect(config('app.frontend_url') . "?token={$accessToken}&user={$userJson}&auth=register");
             }
         } catch (Exception $e) {
             dd($e->getMessage());

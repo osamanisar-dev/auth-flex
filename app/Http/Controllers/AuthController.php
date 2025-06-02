@@ -8,6 +8,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
@@ -56,5 +57,28 @@ class AuthController extends Controller
                 'error' => $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public function verifyEmail(Request $request, $id, $hash)
+    {
+        $user = User::findOrFail($id);
+        if (!URL::hasValidSignature($request)) {
+            abort(401, 'Invalid or expired verification link.');
+        }
+
+        if (!hash_equals((string)$hash, sha1($user->email))) {
+            abort(403, 'Invalid hash.');
+        }
+        if (!$user->email_verified_at) {
+            $user->email_verified_at = now();
+            $user->save();
+        }
+
+        return redirect()->to(config('app.frontend_url') . '?' . http_build_query([
+                'verified' => '1',
+                'id' => $user->id,
+                'email_verified_at' => $user->email_verified_at->toISOString()
+            ])
+        );
     }
 }

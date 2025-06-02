@@ -45,10 +45,10 @@ export default {
     },
 
     async signUpWithGoogle() {
-        try {
             window.location.href = process.env.VUE_APP_GOOGLE_WEB_URL;
-        } catch (error) {
-            console.error('Google OAuth error:', error);
-        }
+    },
+
+    async signUpWithSlack() {
+            window.location.href = process.env.VUE_APP_SLACK_WEB_URL;
     }
 }
