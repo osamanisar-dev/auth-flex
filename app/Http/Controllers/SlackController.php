@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -20,7 +19,6 @@ class SlackController extends Controller
         try {
             $token = Socialite::driver('slack')->getAccessTokenResponse(request('code'));
             $user = Socialite::driver('slack')->userFromToken($token['access_token']);
-            $findUser = User::where('slack_id', $user->id)->first();
             $user = User::updateOrCreate(
                 ['slack_id' => $user->id],
                 [

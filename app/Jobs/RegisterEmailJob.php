@@ -12,15 +12,16 @@ use Illuminate\Support\Facades\URL;
 class RegisterEmailJob implements ShouldQueue
 {
     use Queueable;
-
-    public $user;
+    public $userId;
+    public $userEmail;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($user)
+    public function __construct($userId, $userEmail)
     {
-        $this->user = $user;
+        $this->userId = $userId;
+        $this->userEmail = $userEmail;
     }
 
     /**
@@ -31,8 +32,8 @@ class RegisterEmailJob implements ShouldQueue
         $signedUrl = URL::temporarySignedRoute(
             'verification.verify',
             now()->addMinutes(10),
-            ['id' => $this->user->id, 'hash' => sha1($this->user->email)]
+            ['id' => $this->userId, 'hash' => sha1($this->userEmail)]
         );
-        Mail::to($this->user->email)->send(new EmailVeritficationMail($signedUrl));
+        Mail::to($this->userEmail)->send(new EmailVeritficationMail($signedUrl));
     }
 }

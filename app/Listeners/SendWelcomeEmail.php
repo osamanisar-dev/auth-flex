@@ -22,6 +22,6 @@ class SendWelcomeEmail
      */
     public function handle(UserRegistered $event): void
     {
-        dispatch(new RegisterEmailJob($event->user));
+        dispatch(new RegisterEmailJob($event->user->id, $event->user->email));
     }
 }
