@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Services\GoogleAuthService;
 use Exception;
-use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
 class GoogleController extends Controller
 {
+    protected $googleAuthService;
+
+    public function __construct(GoogleAuthService $googleAuthService)
+    {
+        $this->googleAuthService = $googleAuthService;
+    }
+
     public function redirectToGoogle()
     {
         return Socialite::driver('google')->with(['prompt' => 'select_account'])->redirect();
@@ -17,27 +23,9 @@ class GoogleController extends Controller
     public function handleGoogleCallback()
     {
         try {
-            $token = Socialite::driver('google')->getAccessTokenResponse(request('code'));
-            $user = Socialite::driver('google')->userFromToken($token['access_token']);
-            $user = User::updateOrCreate(
-                ['google_id' => $user->id],
-                [
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'email_verified_at' => $user->user['email_verified'] ? now() : null,
-                    'google_id' => $user->id,
-                ]
-            );
-            Auth::login($user);
-            $accessToken = $user->createToken('google-login')->plainTextToken;
-            $userData = [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'email_verified_at' => $user->email_verified_at
-            ];
-            $userJson = urlencode(json_encode($userData));
-            return redirect(config('app.frontend_url') . "/?token={$accessToken}&user={$userJson}&auth=" . ($user->wasRecentlyCreated ? 'register' : 'login'));
+            $data = $this->googleAuthService->handleGoogleCallback();
+            $userJson = urlencode(json_encode($data['user']));
+            return redirect(config('app.frontend_url') . "/?token={$data['token']}&user={$userJson}&auth={$data['auth_type']}");
         } catch (Exception $e) {
             dd($e->getMessage());
         }

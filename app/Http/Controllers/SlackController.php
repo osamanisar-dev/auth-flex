@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Services\SlackAuthService;
 use Exception;
-use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
 class SlackController extends Controller
 {
+    protected $slackAuthService;
+
+    public function __construct(SlackAuthService $slackAuthService)
+    {
+        $this->slackAuthService = $slackAuthService;
+    }
+
     public function redirectToSlack()
     {
         return Socialite::driver('slack')->redirect();
@@ -17,27 +23,9 @@ class SlackController extends Controller
     public function handleSlackCallback()
     {
         try {
-            $token = Socialite::driver('slack')->getAccessTokenResponse(request('code'));
-            $user = Socialite::driver('slack')->userFromToken($token['access_token']);
-            $user = User::updateOrCreate(
-                ['slack_id' => $user->id],
-                [
-                    'name' => preg_replace('/[\x{200B}-\x{200D}\x{FEFF}]/u', '', $user->name),
-                    'email' => $user->email,
-                    'email_verified_at' => $user->user['ok'] ? now() : null,
-                    'slack_id' => $user->id,
-                ]
-            );
-            Auth::login($user);
-            $accessToken = $user->createToken('slack-login')->plainTextToken;
-            $userData = [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'email_verified_at' => $user->email_verified_at
-            ];
-            $userJson = urlencode(json_encode($userData));
-            return redirect(config('app.frontend_url') . "/?token={$accessToken}&user={$userJson}&auth=".($user->wasRecentlyCreated ? 'register':'login'));
+            $data = $this->slackAuthService->handleSlackCallback();
+            $userJson = urlencode(json_encode($data['user']));
+            return redirect(config('app.frontend_url') . "/?token={$data['token']}&user={$userJson}&auth={$data['auth_type']}");
         } catch (Exception $e) {
             dd($e->getMessage());
         }
