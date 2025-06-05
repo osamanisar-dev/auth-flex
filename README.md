@@ -1,6 +1,10 @@
 # 🎯 AuthFlex
 
-AuthFlex is a modern authentication system built using Laravel APIs for the backend and Vue.js for the frontend. This project implements user registration with email verification, login, logout, a user dashboard displaying user details, toast notifications for user feedback, and social authentication via Google Sign-In configured through Google Cloud.
+AuthFlex is a modern authentication system built using Laravel APIs for the backend and Vue.js for the frontend. This project implements user registration with email verification, login, logout, a user dashboard displaying user details, toast notifications for user feedback, and social authentication via Google Sign-In and Slack Sign-In configured through Google Cloud Slack API (your apps).
+
+---
+
+https://github.com/user-attachments/assets/b707cb42-80a8-4f53-bd79-a8ffc247582c
 
 ---
 
@@ -17,6 +21,9 @@ AuthFlex is a modern authentication system built using Laravel APIs for the back
 
 - 🌐 **Google OAuth Sign-In & Sign-Up**  
   Users can sign up or sign in using their Google account. Google OAuth is properly configured via Google Cloud Console.
+
+- 🌐 **Slack Sign-In & Sign-Up**  
+  Users can sign up or sign in using their Slack account. Slack is properly configured via Slack API (your apps)..
 
 - 🔔 **Toast Notifications**  
   All major actions (registration, login, logout, verification, errors) display friendly toast notifications for instant user feedback.
@@ -46,7 +53,7 @@ AuthFlex is a modern authentication system built using Laravel APIs for the back
 - ⚙️ PHP >= 8.x
 - 📦 Composer
 - 🗃️ MySQL or compatible database
-- 🧱 Laravel 10+ (API backend)
+- 🧱 Laravel 11+ (API backend)
 - 🖼️ Vue.js 3+ (frontend SPA)
 - 🔗 Ngrok (for local tunneling and OAuth callbacks)
 - ☁️ Google Cloud Console account (for Google OAuth credentials)
@@ -90,8 +97,9 @@ Make sure to complete the following setup steps before running the project:
 
 - Set `VUE_APP_API_URL` to your Laravel 🔗 ngrok URL.
 - Add `VUE_APP_GOOGLE_WEB_URL` for Google Sign-In integration.
+- Add `VUE_APP_SLACK_WEB_URL` for Slack Sign-In integration.
 
-✅ Double-check these settings to ensure seamless integration between your backend and frontend with Google OAuth and email verification features.
+✅ Double-check these settings to ensure seamless back-end and front-end integration with Google OAuth/Slack and email verification features.
 
 ---
 
